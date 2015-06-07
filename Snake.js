@@ -43,7 +43,7 @@ var snakeGame = (function(){
 	function updateBounds(){
 		maximalX = window.innerWidth;
 		maximalY = window.innerHeight;
-		//setUpCanvas();//test this first
+		setUpCanvas();//test this first
 	}
 
 	//make this look like a singleton with possible directions
@@ -211,7 +211,7 @@ var snakeGame = (function(){
 		playerSnake = new Snake(); //global snake for this
 		updateBounds();
 		window.onkeydown = keyDownHandler;
-		//window.onresize = updateBounds;
+		window.onresize = updateBounds;
 		setUpCanvas();
 		//initiate stuff here
 		run();
