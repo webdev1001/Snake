@@ -104,6 +104,9 @@ var snakeGame = (function(){
 			this.snakeBlocks.pop();
 			this.snakeBlocks.unshift(nextElement);
 		};
+		this.getBlocks = function(){
+			return this.snakeBlocks;
+		}
 	}
 	Snake.prototype = new Element(); //Inherit Elements functions, especially isSamePos
 	Snake.prototype.constructor = Snake; //To make sure I get Snake when I ask how I created it
@@ -113,6 +116,7 @@ var snakeGame = (function(){
 		return snakeHead.getX() > maximalX || snakeHead.getX() < 0 || snakeHead.getY() > maximalY ||
 		snakeHead.getY() < 0;
 	}
+	
 	//Basic game functions
 	function spawnElement(){ //right now can spawn on the snake, FIX LATER
 		var xCoord = Math.floor(Math.random() * (window.innerWidth/(2*cellSize)));
@@ -188,6 +192,7 @@ var snakeGame = (function(){
 		}
 		
 	}
+
 	var canvas;
 	function setUpCanvas(){
 		canvas = document.getElementById("canvas");
