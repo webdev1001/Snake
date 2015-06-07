@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script src = "Snake.js"></script>
+	
+
+
+<script>
+/**
+	Since I am not letting information out of Snake.js, by only returning start method
+	I copy n paste stuff here to test them.
+	Todo: Find a better way of testing it.
+*/
+	console.log("HELLO");
+	var Directions = Object.freeze({
+		NORTH: [0, 1], //delta values in that direction
+		SOUTH: [0, -1],
+		EAST: [1, 0],
+		WEST: [-1, 0],
+	});
+	var maximalY;
+	var maximalX;
+	var test = Directions.WEST;
+	function isSameDirection(firstDir, secondDir){
+		return firstDir[0] === secondDir[0] && firstDir[1] === secondDir[1];
+	}
+
+	console.log(test[0] + " and " + test[1] );
+	function Element(xCoord, yCoord){
+		this.xCoord = xCoord;
+		this.yCoord = yCoord;
+	}
+
+	Element.prototype.getX = function() {
+		return this.xCoord;
+	};
+
+	Element.prototype.getY = function() {
+		return this.yCoord;
+	};
+
+	Element.prototype.isSamePos = function(element){
+		return this.getX() === element.getX() && this.getY() === element.getY();
+	};
+
+	function Snake(){
+		//spawns middle of the screen and goes north as default
+		var head = new Element(Math.floor(window.innerWidth/2), Math.floor(window.innerHeight/2));
+		var startEl2 = new Element(Math.floor(window.innerWidth/2) + 1, Math.floor(window.innerHeight/2));
+		var startEl3 = new Element(Math.floor(window.innerWidth/2) + 2, Math.floor(window.innerHeight/2));
+
+		this.snakeBlocks = [startEl3, startEl2, head];
+		this.currLength = this.snakeBlocks.length;
+		this.currDirection = Directions.NORTH;
+
+		this.switchDirection = function(newDirection){
+			this.currDirection = newDirection;
+		};
+
+	}
+	
+	Snake.prototype = new Element(); //Inherit Elements functions
+	Snake.prototype.constructor = Snake; //To make sure I get Snake when I as
+
+	var snakeTest = new Snake();
+	var elementTest = new Element(248, 352);
+	console.log(snakeTest.currDirection[0] + " and " + snakeTest.currDirection[1]);
+	console.log(snakeTest.snakeBlocks[0].getY() + " and x is " + snakeTest.snakeBlocks[0].getX());
+	console.log("Checking if positions are same " + snakeTest.snakeBlocks[0].isSamePos(elementTest));
+
+
+	console.log("Position of snake is North, must be true " + isSameDirection(snakeTest.currDirection, Directions.NORTH));
+
+	snakeTest.switchDirection(Directions.WEST);
+	console.log("Position of snake is West now , must be true " + isSameDirection(snakeTest.currDirection, Directions.WEST));
+	</script>
+
+
+</body>
+</html>

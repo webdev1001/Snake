@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Snake Game</title>
+</head>
+<body>
+<style>
+	.foo{ 
+		width: 20px;
+    	height: 20px;
+    	background-color:#09cdda;
+	}
+
+
+</style>
+<script src = "Snake.js"> </script>
+<div class = "foo"></div>
+<div class = "foo"></div>
+<div class = "foo"></div>
+
+<canvas id= "canvas"> </canvas>
+<script>
+	snakeGame.start();
+</script>
+<!--<script>
+	
+	var canvas = document.getElementById("canvas");
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+
+
+		var ctx = canvas.getContext('2d');
+		for (var i = 0; i < 100; i+=20) {
+			ctx.fillRect(i, i, 20, 20);
+		};
+</script>
+-->
+
+
+</body>
+</html>
