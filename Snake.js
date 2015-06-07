@@ -128,12 +128,23 @@ var snakeGame = (function(){
 	}
 	//Basic game functions
 	function spawnElement(){ //right now can spawn on the snake, FIX LATER
-		var xCoord = Math.floor(Math.random() * (window.innerWidth/(2*cellSize)));
-		var yCoord = Math.floor(Math.random() * (window.innerHeight/(2*cellSize)));
-		var newBlock = new Element(xCoord, yCoord);
+		var newBlock;
+		do{
+			var xCoord = Math.floor(Math.random() * (window.innerWidth/(2*cellSize)));
+			var yCoord = Math.floor(Math.random() * (window.innerHeight/(2*cellSize)));
+			newBlock = new Element(xCoord, yCoord);
+		}while(isElementExist(newBlock));
+		
 		blocks.push(newBlock);
 	}
-
+	function isElementExist(element){
+		for (var i = 0; i < blocks.length; i++) {
+			if(element.isSamePos(blocks[i])){
+				return true;
+			}
+		}
+		return false;
+	}
 	//can only pick with head 
 	function pickElements(){
 		for (var i = 0; i < blocks.length; i++) {
