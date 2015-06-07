@@ -38,6 +38,8 @@ var snakeGame = (function(){
 	var updateInterval;
 	var spawnInterval;
 
+	var cellSize = 20;
+
 	function updateBounds(){
 		maximalX = window.innerWidth;
 		maximalY = window.innerHeight;
@@ -73,63 +75,59 @@ var snakeGame = (function(){
 	Element.prototype.isSamePos = function(element){
 		return this.getX() === element.getX() && this.getY() === element.getY();
 	};
-
+	Element.prototype.toString = function(){
+		return "The X is " + this.getX() + " Y is " + this.getY();
+	}
 
 	//Snake is a bit more than just an element
 	function Snake(){
 		//spawns middle of the screen and goes north as default
-		var head = new Element(Math.floor(window.innerWidth/2), Math.floor(window.innerHeight/2));
-		var startEl2 = new Element(Math.floor(window.innerWidth/2) + 1, Math.floor(window.innerHeight/2));
-		var startEl3 = new Element(Math.floor(window.innerWidth/2) + 2, Math.floor(window.innerHeight/2));
+		var head = new Element(Math.floor((window.innerWidth/(2*cellSize))), Math.floor((window.innerHeight/(2*cellSize))));
+		var startEl2 = new Element(Math.floor((window.innerWidth/(2*cellSize))) + 1, Math.floor((window.innerHeight/(2*cellSize))));
+		var startEl3 = new Element(Math.floor((window.innerWidth/(2*cellSize))) + 2, Math.floor((window.innerHeight/(2*cellSize))));
 
-		this.snakeBlocks = [startEl3, startEl2, head];
-
-		for (var i = 0; i < this.snakeBlocks.length; i++) {
-			//console.log("Inside snake constructor, length of snake is " + 
-				//this.snakeBlocks.length);
-			console.log("X position is " + this.snakeBlocks[i].getX() + 
-				" and Y pos is " + this.snakeBlocks[i].getY());
-		}
-		this.currLength = this.snakeBlocks.length;
-		this.currDirection = Directions.NORTH;
+		//X's are 28, 29, 30,all y are 35.
+		this.snakeBlocks = [head, startEl2, startEl3];
+		this.currDirection = Directions.SOUTH;
+		//console.log(head + " XXXX" + startEl2 + " XXXX" + startEl3);
 
 		this.switchDirection = function(newDirection){
 			this.currDirection = newDirection;
 		};
 		this.moveSnake = function(){
-			var lastIndex = (this.snakeBlocks.length) - 1;
-			var tempElement = this.snakeBlocks[lastIndex]; //head element
+			//var lastIndex = (this.snakeBlocks.length) - 1;
+			var tempElement = this.snakeBlocks[0]; //head element
 			var nextXCoord = tempElement.getX() + this.currDirection[0];
 			var nextYCoord = tempElement.getY() + this.currDirection[1];
-			console.log("Next X coord is " + nextXCoord + " next Y is " + nextYCoord);
 			var nextElement = new Element(nextXCoord, nextYCoord);
 			this.snakeBlocks.pop();
-			console.log("I should have popped it " + this.snakeBlocks.length);
-			this.snakeBlocks.push(nextElement);
-			console.log("I should have pushed it " + this.snakeBlocks.length);
+			this.snakeBlocks.unshift(nextElement);
 		};
 	}
 	Snake.prototype = new Element(); //Inherit Elements functions, especially isSamePos
 	Snake.prototype.constructor = Snake; //To make sure I get Snake when I ask how I created it
 
-
-	function isOutside(snakeHead){
+	//not in use yet
+	function isOutside(snakeHead){//give it first element of playerSnake.snakeBlocks
 		return snakeHead[0] > maximalX || snakeHead[0] < 0 || snakeHead[1] > maximalY ||
 		snakeHead[1] < 0;
 	}
 	//Basic game functions
 	function spawnElement(){ //right now can spawn on the snake, FIX LATER
-		var xCoord = Math.floor(Math.random()* window.innerWidth);
-		var yCoord = Math.floor(Math.random()* window.innerHeight);
+		var xCoord = Math.floor(Math.random() * (window.innerWidth/(2*cellSize)));
+		var yCoord = Math.floor(Math.random() * (window.innerHeight/(2*cellSize)));
 		var newBlock = new Element(xCoord, yCoord);
 		blocks.push(newBlock);
 	}
 
+	//can only pick with head 
 	function pickElements(){
 		for (var i = 0; i < blocks.length; i++) {
-			var head = playerSnake.snakeBlocks[playerSnake.snakeBlocks.length-1];
+			var head = playerSnake.snakeBlocks[0];
 			if(blocks[i].isSamePos(head)){
-				var tail = playerSnake.snakeBlocks[0];
+				//console.log("ZING ZING CAUGHT AN ELEMENT MUAHAHA");
+				var lastIndex = (playerSnake.snakeBlocks.length) - 1;
+				var tail = playerSnake.snakeBlocks[lastIndex];
 				var nextXCoord = tail.getX() - playerSnake.currDirection[0];
 				var nextYCoord = tail.getY() - playerSnake.currDirection[1];
 				var nextElement = new Element(nextXCoord, nextYCoord);
@@ -151,8 +149,8 @@ var snakeGame = (function(){
 
 	function run(){
 		if(running){
-			updateInterval = window.setInterval(update, 10); //do I have to do this on document?
-			spawnInterval = window.setInterval(spawnElement, 10000); //spawn each 2 seconds
+			updateInterval = window.setInterval(update, 150); //do I have to do this on document?
+			spawnInterval = window.setInterval(spawnElement, 3000); //spawn each 2 seconds
 		}
 	}
 
@@ -180,6 +178,7 @@ var snakeGame = (function(){
 				
 				break;
 		}
+		
 	}
 	var canvas;
 	function setUpCanvas(){
@@ -191,25 +190,19 @@ var snakeGame = (function(){
 	function drawOnCanvas(){
 		var ctx = canvas.getContext('2d');
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-		for (var i = 0; i < playerSnake.snakeBlocks.length; i++) {
-			console.log("Inside drawcanvas, length of snake is " + 
-				playerSnake.snakeBlocks.length);
-			console.log("X position is " + playerSnake.snakeBlocks[i].getX() + 
-				" and Y pos is " + playerSnake.snakeBlocks[i].getY());
-			ctx.fillRect(Math.floor(playerSnake.snakeBlocks[i].getX()), 
-				Math.floor(playerSnake.snakeBlocks[i].getY()), 20, 20);
+		ctx.fillStyle = "#09CDDA";//cyan colour for the head
+		ctx.fillRect(playerSnake.snakeBlocks[0].getX()*cellSize, playerSnake.snakeBlocks[0].getY()*cellSize, cellSize, cellSize);
+		ctx.fillStyle = "#000000";//black colour
+		for (var i = 1; i < playerSnake.snakeBlocks.length; i++) {
+			ctx.fillRect(Math.floor(playerSnake.snakeBlocks[i].getX())*cellSize, 
+				Math.floor(playerSnake.snakeBlocks[i].getY())*cellSize, cellSize, cellSize);
 		}
-		
 		for (var i = 0; i < blocks.length; i++) {
-			console.log("Inside drawcanvas, amount of blocks is " + 
-				blocks.length);
-			ctx.fillRect(blocks[i].getX(), 
-				blocks[i].getY(), 20, 20);
+			ctx.fillRect(Math.floor(blocks[i].getX())*cellSize, 
+				Math.floor(blocks[i].getY())*cellSize, cellSize, cellSize);
 		};
 		
 	}
-
 	function startGame(){
 		running = true;
 		playerSnake = new Snake(); //global snake for this
