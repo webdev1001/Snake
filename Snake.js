@@ -223,6 +223,7 @@ var snakeGame = (function(){
 	function drawOnCanvas(){
 		var ctx = canvas.getContext('2d');
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.strokeRect(0, 0, canvas.width, canvas.height);
 		ctx.fillStyle = "#09CDDA";//cyan colour for the head
 		ctx.fillRect(playerSnake.snakeBlocks[0].getX()*cellSize, playerSnake.snakeBlocks[0].getY()*cellSize, cellSize, cellSize);
 		ctx.fillStyle = "#000000";//black colour
