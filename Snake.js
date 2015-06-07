@@ -43,7 +43,7 @@ var snakeGame = (function(){
 	function updateBounds(){
 		maximalX = window.innerWidth;
 		maximalY = window.innerHeight;
-		setUpCanvas();//test this first
+		//setUpCanvas();//test this first
 	}
 
 	//make this look like a singleton with possible directions
@@ -109,8 +109,8 @@ var snakeGame = (function(){
 
 	//not in use yet
 	function isOutside(snakeHead){//give it first element of playerSnake.snakeBlocks
-		return snakeHead[0] > maximalX || snakeHead[0] < 0 || snakeHead[1] > maximalY ||
-		snakeHead[1] < 0;
+		return snakeHead.getX() > maximalX || snakeHead.getX() < 0 || snakeHead.getY() > maximalY ||
+		snakeHead.getY() < 0;
 	}
 	//Basic game functions
 	function spawnElement(){ //right now can spawn on the snake, FIX LATER
@@ -138,10 +138,13 @@ var snakeGame = (function(){
 	}
 
 	function update(){
+		if(isOutside(playerSnake.snakeBlocks[0])){
+			alert("You lost, RIP");//temporary, should pause the game later
+		}
 		drawOnCanvas();
 		playerSnake.moveSnake();
 		pickElements();
-		if(blocks.length === 0){ //incase player picked up every
+		if(blocks.length === 0){ //incase player picked up every element
 			spawnElement();
 		}
 		
@@ -149,8 +152,8 @@ var snakeGame = (function(){
 
 	function run(){
 		if(running){
-			updateInterval = window.setInterval(update, 150); //do I have to do this on document?
-			spawnInterval = window.setInterval(spawnElement, 3000); //spawn each 2 seconds
+			updateInterval = window.setInterval(update, 150); 
+			spawnInterval = window.setInterval(spawnElement, 3000); //spawn each 3 seconds
 		}
 	}
 
@@ -206,7 +209,7 @@ var snakeGame = (function(){
 	function startGame(){
 		running = true;
 		playerSnake = new Snake(); //global snake for this
-
+		updateBounds();
 		window.onkeydown = keyDownHandler;
 		//window.onresize = updateBounds;
 		setUpCanvas();
