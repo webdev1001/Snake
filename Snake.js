@@ -116,7 +116,16 @@ var snakeGame = (function(){
 		return snakeHead.getX() > maximalX || snakeHead.getX() < 0 || snakeHead.getY() > maximalY ||
 		snakeHead.getY() < 0;
 	}
-	
+	function isCollidingSnake(snake){
+		var snakeblocks = snake.getBlocks();
+		var head = snakeblocks[0];
+		for (var i = 1; i < snakeblocks.length; i++) {
+			if(head.isSamePos(snakeblocks[i])){
+				return true;
+			}
+		}
+		return false;
+	}
 	//Basic game functions
 	function spawnElement(){ //right now can spawn on the snake, FIX LATER
 		var xCoord = Math.floor(Math.random() * (window.innerWidth/(2*cellSize)));
@@ -144,7 +153,7 @@ var snakeGame = (function(){
 	}
 
 	function update(){
-		if(isOutside(playerSnake.snakeBlocks[0])){
+		if(isOutside(playerSnake.snakeBlocks[0]) || isCollidingSnake(playerSnake)){
 			stopGame();
 			alert("You lost, RIP, but hey, you picked " + elementsPicked + " blocks");//temporary, should pause the game later
 		}
