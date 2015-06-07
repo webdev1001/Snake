@@ -37,6 +37,7 @@ var snakeGame = (function(){
 	var maximalX;
 	var updateInterval;
 	var spawnInterval;
+	var elementsPicked = 0;
 
 	var cellSize = 20;
 
@@ -133,13 +134,15 @@ var snakeGame = (function(){
 				var nextElement = new Element(nextXCoord, nextYCoord);
 				playerSnake.snakeBlocks.push(nextElement);
 				blocks.splice(i, 1); //remove from blocks
+				elementsPicked++;
 			}
 		}
 	}
 
 	function update(){
 		if(isOutside(playerSnake.snakeBlocks[0])){
-			alert("You lost, RIP");//temporary, should pause the game later
+			stopGame();
+			alert("You lost, RIP, but hey, you picked " + elementsPicked + " blocks");//temporary, should pause the game later
 		}
 		drawOnCanvas();
 		playerSnake.moveSnake();
@@ -158,28 +161,30 @@ var snakeGame = (function(){
 	}
 
 	function keyDownHandler(e){//add to window.onkeydown later
-		switch(e.keyCode){
-			case 37: //left
-				if(!isSameDirection(playerSnake.currDirection, Directions.EAST)){
-					playerSnake.switchDirection(Directions.WEST);
-				}
-				break;
-			case 38:
-				if(!isSameDirection(playerSnake.currDirection, Directions.SOUTH)){
-					playerSnake.switchDirection(Directions.NORTH);
-				}
-				break;
-			case 39://right
-				if(!isSameDirection(playerSnake.currDirection, Directions.WEST)){
-					playerSnake.switchDirection(Directions.EAST);
-				}
-				break;
-			case 40:
-				if(!isSameDirection(playerSnake.currDirection, Directions.NORTH)){
-					playerSnake.switchDirection(Directions.SOUTH);
-				}
-				
-				break;
+		if(running){
+			switch(e.keyCode){
+				case 37: //left
+					if(!isSameDirection(playerSnake.currDirection, Directions.EAST)){
+						playerSnake.switchDirection(Directions.WEST);
+					}
+					break;
+				case 38:
+					if(!isSameDirection(playerSnake.currDirection, Directions.SOUTH)){
+						playerSnake.switchDirection(Directions.NORTH);
+					}
+					break;
+				case 39://right
+					if(!isSameDirection(playerSnake.currDirection, Directions.WEST)){
+						playerSnake.switchDirection(Directions.EAST);
+					}
+					break;
+				case 40:
+					if(!isSameDirection(playerSnake.currDirection, Directions.NORTH)){
+						playerSnake.switchDirection(Directions.SOUTH);
+					}
+					
+					break;
+			}
 		}
 		
 	}
