@@ -3,32 +3,8 @@ var snakeGame = (function(){
 		List of TODO:s
 		
 
-		Snake movement: have an array, push elements to it when picked up
-		Otherwise, pop last element, push to next position = simulates moving
-		Loop through the whole snake array consisting of elements, 
-		draw snake at x and y positions.
-
-		have a getNextPos in snake
-
-		have a gameTick, move each gameTick, spawn items in an interval, 
-		or when there are no blocks on the board.
-
-		Spawning blocks/elements
-		
-		Make snake eat elements
-		Check collision with yourself
-		Check collision when spawning new elements
-		
-		Use arrays splice method when removing from blocks array
-
-		update each 300-500 ms -ish
-
 		Last thing to do: clean up code, no repitions
 		no long chains
-
-		update bounds of the window each time it resizes
-		if head is outside those bound = lose
-
 	*/
 
 	var running = false;
@@ -96,7 +72,6 @@ var snakeGame = (function(){
 			this.currDirection = newDirection;
 		};
 		this.moveSnake = function(){
-			//var lastIndex = (this.snakeBlocks.length) - 1;
 			var tempElement = this.snakeBlocks[0]; //head element
 			var nextXCoord = tempElement.getX() + this.currDirection[0];
 			var nextYCoord = tempElement.getY() + this.currDirection[1];
@@ -108,9 +83,6 @@ var snakeGame = (function(){
 			return this.snakeBlocks;
 		}
 	}
-	Snake.prototype = new Element(); //Inherit Elements functions, especially isSamePos
-	Snake.prototype.constructor = Snake; //To make sure I get Snake when I ask how I created it
-
 	//not in use yet
 	function isOutside(snakeHead){//give it first element of playerSnake.snakeBlocks
 		return snakeHead.getX() > maximalX || snakeHead.getX() < 0 || snakeHead.getY() > maximalY ||
@@ -209,6 +181,12 @@ var snakeGame = (function(){
 					
 					break;
 			}
+		}else {
+			switch(e.keyCode){
+				case 82: //r letter (for reset)
+					resetGame();
+					break;
+			}
 		}
 		
 	}
@@ -252,6 +230,12 @@ var snakeGame = (function(){
 		running = false;
 		clearInterval(updateInterval);
 		clearInterval(spawnInterval);
+	}
+
+	function resetGame(){
+		stopGame();
+		elementsPicked = 0;
+		startGame();
 	}
 
 	return{
